@@ -1,7 +1,7 @@
 -Rolling Code Restaurant App
 Esta aplicación de restaurante es parte de un proyecto final para la institución "Rolling Code". Proporciona una interfaz interactiva para que los usuarios exploren información sobre el restaurante, visualicen el menú, administren su carrito de compras y accedan a áreas protegidas del sistema.
 
-------------------------------------------------------------------------------------------------------------------
+---
 
 -Integrantes:
 Franco Maidana
@@ -20,7 +20,7 @@ Matias Vizcarra
 Gmail: matias.vizcarra.mv@gmail.com
 GitHub: MattVizcarra
 
-------------------------------------------------------------------------------------------------------------------
+---
 
 -Instalación
 Clona el repositorio:
@@ -36,11 +36,11 @@ Asegúrate de tener Node.js y npm instalados en tu sistema.
 -Uso
 Inicia la aplicación:
 
-
 npm run dev
-La aplicación estará disponible en http://localhost:5173
+La aplicación estará disponible en http://localhost:3000/
 
-------------------------------------------------------------------------------------------------------------------
+---
+
 ·Página Principal: Muestra información general y atractiva sobre el restaurante.
 
 ·Nosotros: Detalles sobre la historia y valores del restaurante.
