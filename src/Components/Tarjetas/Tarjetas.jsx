@@ -141,7 +141,7 @@ const Tarjetas = () => {
                 .map((item) => (
                   <Col
                     key={item._id}
-                    xl={3}
+                    xl={4}
                     lg={4}
                     md={6}
                     sm={12}

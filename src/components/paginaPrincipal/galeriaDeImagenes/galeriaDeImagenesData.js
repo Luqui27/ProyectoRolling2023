@@ -8,7 +8,8 @@ export const galeriaImagenesVerticales = [
 
   {
     id: 2,
-    imgenUrl: "../src/assets/ImagenesGaleriasVerticales/galeriaTakeAway.jpg",
+    imgenUrl:
+     "https://i.blogs.es/3691b3/clem-onojeghuo-222411-unsplash/1366_2000.webp",
     descripcion: null,
   },
   {
