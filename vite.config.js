@@ -1,17 +1,17 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 
-// https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
   build: {
-    target: 'esnext', // Puedes ajustar el objetivo de construcción según tus necesidades
-    outDir: 'dist',    // Directorio de salida para los archivos construidos
-    assetsDir: 'assets', // Directorio para activos estáticos
-    minify: 'terser',   // Minificar con Terser
-    sourcemap: true,    // Generar sourcemaps
+    target: 'esnext',
+    outDir: 'dist',
+    assetsDir: 'assets',
+    minify: 'terser',
+    sourcemap: true,
+    emptyOutDir: true, // Para que Vercel pueda eliminar el directorio dist antes de construir
   },
   server: {
-    port: 3000,         // Puerto para el servidor de desarrollo
+    port: 3000,
   },
 });
