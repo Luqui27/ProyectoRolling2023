@@ -1,5 +1,0 @@
-{
-    "functions": { "api/**/*.js": {} },
-    "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }],
-    "cleanUrls": true
-  }
