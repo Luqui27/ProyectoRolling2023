@@ -22,9 +22,15 @@ const MiCarritoTabla = () => {
     cardNumber: "",
     expirationDate: "",
     cvv: "",
-    name:"",
+    name: "",
   });
   const [creditCardFocus, setCreditCardFocus] = useState(""); // Nuevo estado para el enfoque
+  const [formErrors, setFormErrors] = useState({
+    cardNumber: "",
+    expirationDate: "",
+    cvv: "",
+    name: "",
+  });
 
   const handlePaymentMethodChange = (method) => {
     setPaymentMethod(method);
@@ -35,6 +41,26 @@ const MiCarritoTabla = () => {
       ...creditCardDetails,
       [field]: value,
     });
+
+    // Validar y actualizar los mensajes de error
+    const errors = { ...formErrors };
+    if (field === "cardNumber" && !/^[0-9]{16}$/.test(value)) {
+      errors.cardNumber = "Número de tarjeta inválido";
+    } else if (field === "expirationDate" && !/^[0-9]{4}$/.test(value)) {
+      errors.expirationDate = "Fecha de vencimiento inválida";
+    } else if (field === "cvv" && !/^[0-9]{3,4}$/.test(value)) {
+      errors.cvv = "CVV inválido";
+    } else if (field === "name" && value.trim() === "") {
+      errors.name = "Nombre del titular es obligatorio";
+    } else {
+      errors[field] = ""; // Limpiar el mensaje de error si es válido
+    }
+
+    setFormErrors(errors);
+  };
+
+  const hasErrors = () => {
+    return Object.values(formErrors).some((error) => error !== "");
   };
 
   const isCreditCardEmpty =
@@ -57,16 +83,19 @@ const MiCarritoTabla = () => {
     const isConfirmed = window.confirm("¿Estás seguro de realizar la compra?");
 
     if (isConfirmed) {
-      if (paymentMethod === "tarjeta" && isCreditCardEmpty) {
-        alert("Por favor, completa los datos de la tarjeta correctamente.");
-      } else if (paymentMethod === "tarjeta" && !isCreditCardValid) {
-        alert("Por favor, completa los datos de la tarjeta correctamente.");
+      const errors = { ...formErrors };
+      setFormErrors(errors);
+
+      const hasErrors = Object.values(errors).some((error) => error !== "");
+
+      if (hasErrors) {
+        // Muestra un mensaje general de error o realiza la acción necesaria
+        alert("Por favor, completa los datos correctamente.");
       } else {
         realizarCompra();
       }
     }
   };
-
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -349,12 +378,13 @@ const MiCarritoTabla = () => {
                         "cardNumber",
                         e.target.value
                       )
-                      
                     }
                     onFocus={() => setCreditCardFocus("number")}
                     placeholder="Numero de Tarjeta"
                   />
+                  <div className="error-message">{formErrors.cardNumber}</div>
                 </label>
+
                 <label>
                   <input
                     type="text"
@@ -369,7 +399,11 @@ const MiCarritoTabla = () => {
                     onFocus={() => setCreditCardFocus("expiry")}
                     placeholder="Vencimiento MMAA"
                   />
+                  <div className="error-message">
+                    {formErrors.expirationDate}
+                  </div>
                 </label>
+
                 <label>
                   <input
                     type="text"
@@ -381,30 +415,32 @@ const MiCarritoTabla = () => {
                     onFocus={() => setCreditCardFocus("cvc")}
                     placeholder="CVV"
                   />
+                  <div className="error-message">{formErrors.cvv}</div>
                 </label>
+
                 <label>
                   <input
                     type="text"
                     value={creditCardDetails.name}
-                    maxLength={50}
+                    maxLength={20}
                     onChange={(e) =>
                       handleCreditCardDetailsChange("name", e.target.value)
                     }
                     onFocus={() => setCreditCardFocus("name")}
                     placeholder="Nombre Titular"
                   />
+                  <div className="error-message">{formErrors.name}</div>
                 </label>
               </div>
             </div>
           </div>
         )}
       </div>
-      {/* Fin de la nueva sección */}
       <div className="text-center mb-4">
         <button
           className="btn btn-warning m-2"
           onClick={confirmPurchase}
-          disabled={realizandoCompra || isFormEmpty}
+          disabled={realizandoCompra || isFormEmpty || hasErrors()}
         >
           {realizandoCompra ? "Realizando compra..." : "Comprar"}
         </button>

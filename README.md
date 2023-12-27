@@ -25,7 +25,7 @@ GitHub: MattVizcarra
 -Instalación
 Clona el repositorio:
 
-git clone https://github.com/MattVizcarra/ProyectoFinalRolling2023.git
+git clone https://github.com/Luqui27/ProyectoRolling2023.git
 Instala las dependencias:
 
 cd PROYECTOFINALROLLING2023
@@ -56,7 +56,7 @@ La aplicación estará disponible en http://localhost:3000/
 ·Error 404: Página personalizada para manejar rutas no encontradas.
 
 -Rutas
-·/: Página principal.
+·/ Página principal.
 ·/Nosotros: Información sobre el restaurante y su historia.
 ·/Tarjetas: Menús y tarjetas disponibles en el restaurante.
 ·/Carrito: Revisión y gestión del carrito de compras.
