@@ -9,8 +9,8 @@ export const galeriaImagenesVerticales = [
   {
     id: 2,
     imgenUrl:
-     "https://i.blogs.es/3691b3/clem-onojeghuo-222411-unsplash/1366_2000.webp",
-    descripcion: null,
+     "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRVKU-hLVeJFMuMyV_C-LJuKqJMKloYF9d9P17bF1QzBrcxWFeB-uhCFCGcbisLRh_ooMc&usqp=CAU",
+    descripcion: "Take Away",
   },
   {
     id: 3,

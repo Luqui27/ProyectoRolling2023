@@ -2,6 +2,10 @@ import React, { useState, useEffect } from "react";
 import "./MiCarritoTabla.css";
 import Tarjetas from "../Tarjetas/Tarjetas";
 import { Link, useNavigate } from "react-router-dom";
+import Cards from 'react-credit-cards-2';
+import 'react-credit-cards-2/dist/es/styles-compiled.css';
+
+
 
 const obtenerIdUsuarioDesdeCookies = () => {
   const cookies = document.cookie.split("; ");
@@ -15,6 +19,54 @@ const MiCarritoTabla = () => {
   const [eliminandoProductoId, setEliminandoProductoId] = useState(null);
   const [obteniendoCarrito, setObteniendoCarrito] = useState(true);
   const [realizandoCompra, setRealizandoCompra] = useState(false);
+  const [paymentMethod, setPaymentMethod] = useState("efectivo");
+  const [creditCardDetails, setCreditCardDetails] = useState({
+    cardNumber: "",
+    expirationDate: "",
+    cvv: "",
+  });
+  const [creditCardFocus, setCreditCardFocus] = useState(""); // Nuevo estado para el enfoque
+  
+  
+
+  const handlePaymentMethodChange = (method) => {
+    setPaymentMethod(method);
+  };
+
+  const handleCreditCardDetailsChange = (field, value) => {
+    setCreditCardDetails({
+      ...creditCardDetails,
+      [field]: value,
+    });
+  };
+
+  const isCreditCardEmpty =
+  paymentMethod === "tarjeta" &&
+  (Object.values(creditCardDetails).some((value) => !value.trim()) ||
+    Object.keys(creditCardDetails).length !== 3);
+
+const isCreditCardValid =
+  paymentMethod === "tarjeta" &&
+  /^[0-9]{16}$/.test(creditCardDetails.cardNumber) &&
+  /^[0-9]{4}$/.test(creditCardDetails.expirationDate) &&
+  /^[0-9]{3,4}$/.test(creditCardDetails.cvv);
+
+const isFormEmpty = pedidoMiCarrito.length === 0 || (paymentMethod === "tarjeta" && isCreditCardEmpty);
+const isFormValid = paymentMethod === "tarjeta" ? isCreditCardValid : true;
+
+const confirmPurchase = () => {
+  const isConfirmed = window.confirm("¿Estás seguro de realizar la compra?");
+  
+  if (isConfirmed) {
+    if (paymentMethod === "tarjeta" && isCreditCardEmpty) {
+      alert("Por favor, completa los datos de la tarjeta correctamente.");
+    } else if (paymentMethod === "tarjeta" && !isCreditCardValid) {
+      alert("Por favor, completa los datos de la tarjeta correctamente.");
+    } else {
+      realizarCompra();
+    }
+  }
+};
 
   const navigate = useNavigate();
 
@@ -192,11 +244,13 @@ const MiCarritoTabla = () => {
         <h1 className="tituloCarrito">Mi Carrito</h1>
       </div>
       <div className="container">
+        <div className="table-responsive">
+
         <table className="table">
           <thead>
             <tr>
               <th scope="col">NOMBRE</th>
-              <th scope="col">DETALLE</th>
+           
               <th scope="col">PRECIO UNITARIO</th>
               <th scope="col">CANTIDAD</th>
               <th scope="col">ELIMINAR</th>
@@ -207,7 +261,7 @@ const MiCarritoTabla = () => {
             {pedidoMiCarrito.map((producto) => (
               <tr key={producto.menu}>
                 <th>{producto.nombre}</th>
-                <td>{producto.detalle}</td>
+          
                 <td>{`$${producto.precio}`}</td>
                 <td>
                   <button
@@ -247,20 +301,101 @@ const MiCarritoTabla = () => {
             ))}
           </tbody>
         </table>
+
+        </div>
+        
       </div>
 
       <h2 className="tituloCarrito">
         Total a pagar: $ {precioTotal.toLocaleString()}
       </h2>
-      <div className="text-center mb-4">
-        <button
-          className="btn btn-warning"
-          onClick={realizarCompra}
-          disabled={realizandoCompra}
-        >
-          {realizandoCompra ? "Realizando compra..." : "Comprar"}
-        </button>
+      <div className="opciones-pago">
+        <h2 className="tituloCarrito">Opciones de Pago</h2>
+        <div className="centrar-radios">
+          <label className="m-2">
+            <input
+              type="radio"
+              value="efectivo"
+              checked={paymentMethod === "efectivo"}
+              onChange={() => handlePaymentMethodChange("efectivo")}
+            />
+            Efectivo
+          </label>
+          <label className="m-2">
+            <input
+              type="radio"
+              value="tarjeta"
+              checked={paymentMethod === "tarjeta"}
+              onChange={() => handlePaymentMethodChange("tarjeta")}
+            />
+            Tarjeta
+          </label>
+        </div>
+
+
+            {paymentMethod === "tarjeta" && (
+                      <div className="container">
+                      <div className="formulario-tarjeta col-lg-6 mx-auto">
+              <div>
+                <Cards
+                cvc={creditCardDetails.cvv}
+                expiry={creditCardDetails.expirationDate}
+                focused={creditCardFocus}
+                name="Nombre del titular"
+                number={creditCardDetails.cardNumber}
+              />
+                <label>
+                  <input
+                    type="text"
+                    value={creditCardDetails.cardNumber}
+                    onChange={(e) =>
+                      handleCreditCardDetailsChange("cardNumber", e.target.value)
+                    }
+                    onFocus={() => setCreditCardFocus("number")}
+                    placeholder="Card Number"
+                  />
+                </label>
+                <label>
+                  <input
+                    type="text"
+                    value={creditCardDetails.expirationDate}
+                    onChange={(e) =>
+                      handleCreditCardDetailsChange(
+                        "expirationDate",
+                        e.target.value
+                      )
+                    }
+                    onFocus={() => setCreditCardFocus("expiry")}
+                    placeholder="Expiration Date"
+                  />
+                </label>
+                <label>
+                  <input
+                    type="text"
+                    value={creditCardDetails.cvv}
+                    onChange={(e) =>
+                      handleCreditCardDetailsChange("cvv", e.target.value)
+                    }
+                    onFocus={() => setCreditCardFocus("cvc")}
+                    placeholder="CVV"
+                  />
+                </label>
+              </div>
+              </div>
+        </div>
+            )}
+
       </div>
+      {/* Fin de la nueva sección */}
+      <div className="text-center mb-4">
+      <button
+        className="btn btn-warning m-2"
+        onClick={confirmPurchase}
+        disabled={realizandoCompra || isFormEmpty}
+      >
+        {realizandoCompra ? "Realizando compra..." : "Comprar"}
+      </button>
+    </div>
     </>
   ) : (
     <>

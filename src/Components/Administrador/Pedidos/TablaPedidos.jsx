@@ -88,7 +88,7 @@ function TablaPedidos({ pedidos, handleEdit, handleDelete }) {
     <Table striped bordered hover className="table-light">
       <thead>
         <tr>
-          <th>ID Pedido</th>
+
           <th>Email Usuario</th>
           <th>Fecha y Hora</th>
           <th>Productos</th>
@@ -99,7 +99,7 @@ function TablaPedidos({ pedidos, handleEdit, handleDelete }) {
       <tbody>
         {pedidos.map((pedido) => (
           <tr key={pedido._id}>
-            <td>{pedido._id}</td>
+
             <td>{userEmails[pedido.usuario] || "Loading..."}</td>
             <td>{formatFecha(pedido.fecha)}</td>
             <td>

@@ -19,6 +19,7 @@ function GaleriaImagenes() {
     });
   };
 
+
   return (
     <Container>
       <>
@@ -33,6 +34,7 @@ function GaleriaImagenes() {
                 key={imagenVertical.id}
                 onClick={() => handleImageClick(imagenVertical.descripcion)}
               >
+                  <h1 className="titulosGaleriaVertical">{imagenVertical.descripcion || "" }</h1>
                 <img
                   src={imagenVertical.imgenUrl}
                   alt={imagenVertical.descripcion}

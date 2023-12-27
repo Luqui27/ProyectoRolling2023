@@ -14,7 +14,7 @@ const MenuTable = ({ menus, handleEdit, handleDelete }) => {
     <Table striped bordered hover className="table-light">
       <thead>
         <tr>
-          <th>ID</th>
+
           <th>Nombre</th>
           <th>Disponible</th>
           <th>Precio</th>
@@ -26,7 +26,7 @@ const MenuTable = ({ menus, handleEdit, handleDelete }) => {
       <tbody>
         {menus.map((menu) => (
           <tr key={menu._id}>
-            <td>{menu._id}</td>
+
             <td>{menu.name}</td>
             <td>{menu.isAvailable ? "Sí" : "No"}</td>
             <td>{menu.price}</td>
