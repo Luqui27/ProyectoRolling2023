@@ -2,10 +2,8 @@ import React, { useState, useEffect } from "react";
 import "./MiCarritoTabla.css";
 import Tarjetas from "../Tarjetas/Tarjetas";
 import { Link, useNavigate } from "react-router-dom";
-import Cards from 'react-credit-cards-2';
-import 'react-credit-cards-2/dist/es/styles-compiled.css';
-
-
+import Cards from "react-credit-cards-2";
+import "react-credit-cards-2/dist/es/styles-compiled.css";
 
 const obtenerIdUsuarioDesdeCookies = () => {
   const cookies = document.cookie.split("; ");
@@ -24,10 +22,9 @@ const MiCarritoTabla = () => {
     cardNumber: "",
     expirationDate: "",
     cvv: "",
+    name:"",
   });
   const [creditCardFocus, setCreditCardFocus] = useState(""); // Nuevo estado para el enfoque
-  
-  
 
   const handlePaymentMethodChange = (method) => {
     setPaymentMethod(method);
@@ -41,32 +38,34 @@ const MiCarritoTabla = () => {
   };
 
   const isCreditCardEmpty =
-  paymentMethod === "tarjeta" &&
-  (Object.values(creditCardDetails).some((value) => !value.trim()) ||
-    Object.keys(creditCardDetails).length !== 3);
+    paymentMethod === "tarjeta" &&
+    (Object.values(creditCardDetails).some((value) => !value.trim()) ||
+      Object.keys(creditCardDetails).length !== 4);
 
-const isCreditCardValid =
-  paymentMethod === "tarjeta" &&
-  /^[0-9]{16}$/.test(creditCardDetails.cardNumber) &&
-  /^[0-9]{4}$/.test(creditCardDetails.expirationDate) &&
-  /^[0-9]{3,4}$/.test(creditCardDetails.cvv);
+  const isCreditCardValid =
+    paymentMethod === "tarjeta" &&
+    /^[0-9]{16}$/.test(creditCardDetails.cardNumber) &&
+    /^[0-9]{4}$/.test(creditCardDetails.expirationDate) &&
+    /^[0-9]{3,4}$/.test(creditCardDetails.cvv);
 
-const isFormEmpty = pedidoMiCarrito.length === 0 || (paymentMethod === "tarjeta" && isCreditCardEmpty);
-const isFormValid = paymentMethod === "tarjeta" ? isCreditCardValid : true;
+  const isFormEmpty =
+    pedidoMiCarrito.length === 0 ||
+    (paymentMethod === "tarjeta" && isCreditCardEmpty);
+  const isFormValid = paymentMethod === "tarjeta" ? isCreditCardValid : true;
 
-const confirmPurchase = () => {
-  const isConfirmed = window.confirm("¿Estás seguro de realizar la compra?");
-  
-  if (isConfirmed) {
-    if (paymentMethod === "tarjeta" && isCreditCardEmpty) {
-      alert("Por favor, completa los datos de la tarjeta correctamente.");
-    } else if (paymentMethod === "tarjeta" && !isCreditCardValid) {
-      alert("Por favor, completa los datos de la tarjeta correctamente.");
-    } else {
-      realizarCompra();
+  const confirmPurchase = () => {
+    const isConfirmed = window.confirm("¿Estás seguro de realizar la compra?");
+
+    if (isConfirmed) {
+      if (paymentMethod === "tarjeta" && isCreditCardEmpty) {
+        alert("Por favor, completa los datos de la tarjeta correctamente.");
+      } else if (paymentMethod === "tarjeta" && !isCreditCardValid) {
+        alert("Por favor, completa los datos de la tarjeta correctamente.");
+      } else {
+        realizarCompra();
+      }
     }
-  }
-};
+  };
 
   const navigate = useNavigate();
 
@@ -245,65 +244,62 @@ const confirmPurchase = () => {
       </div>
       <div className="container">
         <div className="table-responsive">
+          <table className="table">
+            <thead>
+              <tr>
+                <th scope="col">NOMBRE</th>
 
-        <table className="table">
-          <thead>
-            <tr>
-              <th scope="col">NOMBRE</th>
-           
-              <th scope="col">PRECIO UNITARIO</th>
-              <th scope="col">CANTIDAD</th>
-              <th scope="col">ELIMINAR</th>
-              <th scope="col">SUBTOTAL</th>
-            </tr>
-          </thead>
-          <tbody>
-            {pedidoMiCarrito.map((producto) => (
-              <tr key={producto.menu}>
-                <th>{producto.nombre}</th>
-          
-                <td>{`$${producto.precio}`}</td>
-                <td>
-                  <button
-                    className="botonDisminuir"
-                    onClick={() => disminuirProducto(producto.menu)}
-                  >
-                    -
-                  </button>
-                  {producto.cantidad}
-                  <button
-                    className="botonAgregar"
-                    onClick={() => agregarProducto(producto.menu)}
-                  >
-                    +
-                  </button>
-                </td>
-                <td>
-                  <button
-                    className="botonEliminar"
-                    onClick={() => eliminarMenu(producto.menu)}
-                    disabled={eliminandoProductoId === producto.menu}
-                  >
-                    {eliminandoProductoId === producto.menu ? (
-                      <div
-                        className="spinner-border spinner-border-sm"
-                        role="status"
-                      >
-                        <span className="sr-only"></span>
-                      </div>
-                    ) : (
-                      "Eliminar"
-                    )}
-                  </button>
-                </td>
-                <td>{`$${producto.cantidad * producto.precio}`}</td>
+                <th scope="col">PRECIO UNITARIO</th>
+                <th scope="col">CANTIDAD</th>
+                <th scope="col">ELIMINAR</th>
+                <th scope="col">SUBTOTAL</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {pedidoMiCarrito.map((producto) => (
+                <tr key={producto.menu}>
+                  <th>{producto.nombre}</th>
 
+                  <td>{`$${producto.precio}`}</td>
+                  <td>
+                    <button
+                      className="botonDisminuir"
+                      onClick={() => disminuirProducto(producto.menu)}
+                    >
+                      -
+                    </button>
+                    {producto.cantidad}
+                    <button
+                      className="botonAgregar"
+                      onClick={() => agregarProducto(producto.menu)}
+                    >
+                      +
+                    </button>
+                  </td>
+                  <td>
+                    <button
+                      className="botonEliminar"
+                      onClick={() => eliminarMenu(producto.menu)}
+                      disabled={eliminandoProductoId === producto.menu}
+                    >
+                      {eliminandoProductoId === producto.menu ? (
+                        <div
+                          className="spinner-border spinner-border-sm"
+                          role="status"
+                        >
+                          <span className="sr-only"></span>
+                        </div>
+                      ) : (
+                        "Eliminar"
+                      )}
+                    </button>
+                  </td>
+                  <td>{`$${producto.cantidad * producto.precio}`}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
-        
       </div>
 
       <h2 className="tituloCarrito">
@@ -332,33 +328,38 @@ const confirmPurchase = () => {
           </label>
         </div>
 
-
-            {paymentMethod === "tarjeta" && (
-                      <div className="container">
-                      <div className="formulario-tarjeta col-lg-6 mx-auto">
+        {paymentMethod === "tarjeta" && (
+          <div className="container">
+            <div className="formulario-tarjeta col-lg-6 mx-auto">
               <div>
                 <Cards
-                cvc={creditCardDetails.cvv}
-                expiry={creditCardDetails.expirationDate}
-                focused={creditCardFocus}
-                name="Nombre del titular"
-                number={creditCardDetails.cardNumber}
-              />
+                  cvc={creditCardDetails.cvv}
+                  expiry={creditCardDetails.expirationDate}
+                  focused={creditCardFocus}
+                  name={creditCardDetails.name}
+                  number={creditCardDetails.cardNumber}
+                />
                 <label>
                   <input
                     type="text"
                     value={creditCardDetails.cardNumber}
+                    maxLength={16}
                     onChange={(e) =>
-                      handleCreditCardDetailsChange("cardNumber", e.target.value)
+                      handleCreditCardDetailsChange(
+                        "cardNumber",
+                        e.target.value
+                      )
+                      
                     }
                     onFocus={() => setCreditCardFocus("number")}
-                    placeholder="Card Number"
+                    placeholder="Numero de Tarjeta"
                   />
                 </label>
                 <label>
                   <input
                     type="text"
                     value={creditCardDetails.expirationDate}
+                    maxLength={4}
                     onChange={(e) =>
                       handleCreditCardDetailsChange(
                         "expirationDate",
@@ -366,13 +367,14 @@ const confirmPurchase = () => {
                       )
                     }
                     onFocus={() => setCreditCardFocus("expiry")}
-                    placeholder="Expiration Date"
+                    placeholder="Vencimiento MMAA"
                   />
                 </label>
                 <label>
                   <input
                     type="text"
                     value={creditCardDetails.cvv}
+                    maxLength={4}
                     onChange={(e) =>
                       handleCreditCardDetailsChange("cvv", e.target.value)
                     }
@@ -380,22 +382,33 @@ const confirmPurchase = () => {
                     placeholder="CVV"
                   />
                 </label>
+                <label>
+                  <input
+                    type="text"
+                    value={creditCardDetails.name}
+                    maxLength={50}
+                    onChange={(e) =>
+                      handleCreditCardDetailsChange("name", e.target.value)
+                    }
+                    onFocus={() => setCreditCardFocus("name")}
+                    placeholder="Nombre Titular"
+                  />
+                </label>
               </div>
-              </div>
-        </div>
-            )}
-
+            </div>
+          </div>
+        )}
       </div>
       {/* Fin de la nueva sección */}
       <div className="text-center mb-4">
-      <button
-        className="btn btn-warning m-2"
-        onClick={confirmPurchase}
-        disabled={realizandoCompra || isFormEmpty}
-      >
-        {realizandoCompra ? "Realizando compra..." : "Comprar"}
-      </button>
-    </div>
+        <button
+          className="btn btn-warning m-2"
+          onClick={confirmPurchase}
+          disabled={realizandoCompra || isFormEmpty}
+        >
+          {realizandoCompra ? "Realizando compra..." : "Comprar"}
+        </button>
+      </div>
     </>
   ) : (
     <>
