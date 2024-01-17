@@ -11,10 +11,10 @@ function Footer() {
   return (
     <>
       <div className="Footer">
-        <Container fluid className="p-0">
+        <Container fluid>
           <Row
             style={{ backgroundColor: "#FFDEEA" }}
-            className="Footer1 d-flex-container justify-content-center y-md-5"
+            className="Footer1 d-flex-container justify-content-center"
           >
             {/* Caja 1 */}
             <div className="col1-Footer col-xl-3 col-lg-4 col-md-12 col-sm-12">
